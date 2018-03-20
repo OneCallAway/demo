@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="test">
+    <!--
+     跟据id查询
+     将sql语句封装到mappedStatement对象中，将id称为statement的id
+     parmeterType：指定输入类型
+     #{}：表示占位符
+     #{id}：id表示接收收入参数，参数名称为id，如果是简单类型，参数名可以任意
+     resultType：指定sql输出结果的映射的对象java类型，select指定resultType表示将单挑记录映射成java对象
+     -->
+    <select id="findUserById" parameterType="int" resultType="entity.User">
+        SELECT * from student WHERE id = #{id};
+    </select>
+
+    <!--根据用户名称模糊查询-->
+    <!--${}:拼接sql串，将接收到的内容不加任何修饰拼接在sql中
+     使用${}拼接sql，可能引起sql注入
+     ${value}:接收输入参数的内容，如果传入类型是简单类型，${}中只能使用value
+     -->
+    <select id="findUserByName" parameterType="String" resultType="entity.User">
+        SELECT * FROM student WHERE NAME LIKE '%${value}%';
+    </select>
+
+    <!-- 添加用户 -->
+    <insert id="insertUser" parameterType="entity.User">
+    <!--
+    将插入数据的主键返回
+        SELECT LAST_insert_id():得到刚才insert进去的主键值，只适用与自增主键
+
+        keyProperty:将查询到的主键值设置到parameterType指定的对象的属性
+        order：相对于insert来说 select last_insert_id()的执行顺序
+
+        resultType：指定select last_insert_id()的执行结果
+    -->
+    <selectKey keyProperty="id" order="AFTER" resultType="int">
+        SELECT LAST_insert_id();
+    </selectKey>
+       INSERT INTO student (name,birthday,age) VALUE (#{name},#{birthday},#{age})
+    </insert>
+        <!--
+            使用mysql的uuid（）生成主键
+            执行过程：
+            通过uuid（）得到主键，将得到的主键设置到user的id属性中
+            在insert执行时，从user对象中取出id属性
+        -->
+        <!--<selectKey keyProperty="id" order="BEFORE" resultType="string">-->
+            <!--SELECT uuid();-->
+        <!--</selectKey>-->
+        <!--INSERT INTO student (id,name,birthday,age) VALUES (#{id},#{name},#{birthday},#{age})-->
+    <!--</insert>-->
+
+
+    <!--删除用户
+    根据id删除用户
+    -->
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        DELETE FROM student WHERE id = #{id}
+    </delete>
+
+    <!--更新用户
+    需要传入用户id
+    需要传入用户的更新信息
+    parameterType指定user对象，包括id和更新信息，id必须存在
+    -->
+    <update id="updateUser" parameterType="entity.User">
+        UPDATE student set name = #{name},birthday=#{birthday},age=#{age} WHERE id = #{id}
+    </update>
+</mapper>
