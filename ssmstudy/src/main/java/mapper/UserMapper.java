@@ -1,6 +1,9 @@
 package mapper;
 
 import entity.User;
+import entity.UserCustom;
+import entity.UserQueryVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,6 +23,9 @@ public interface UserMapper {
     public void insertUser(User user) throws Exception;
 
     public void deleteUser(int id) throws Exception;
+
+    //用户信息的综合查询
+    public List<UserCustom> findUserList(UserQueryVo userQueryVo) throws Exception;
 
 //    public User findUserById(int id) throws Exception;
 //

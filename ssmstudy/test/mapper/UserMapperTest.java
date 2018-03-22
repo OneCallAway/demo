@@ -1,6 +1,8 @@
 package mapper;
 
 import entity.User;
+import entity.UserCustom;
+import entity.UserQueryVo;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -57,6 +59,28 @@ public class UserMapperTest {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 
         List<User> list = userMapper.findUserByName("qwe");
+
+        sqlSession.close();
+
+        System.out.println(list);
+    }
+
+    @Test
+    public void testFindUserList() throws Exception{
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        //创建UserMapper对象，mybatis自动生成mapper代理对象
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+        //创建包装对象
+        UserQueryVo userQueryVo = new UserQueryVo();
+        UserCustom userCustom = new UserCustom();
+        userCustom.setAge(25);
+        userCustom.setName("ad");
+        userQueryVo.setUserCustom(userCustom);
+
+        //调用usermapper发放
+        List<UserCustom> list = userMapper.findUserList(userQueryVo);
 
         sqlSession.close();
 

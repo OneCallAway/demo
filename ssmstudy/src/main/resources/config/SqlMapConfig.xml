@@ -5,9 +5,25 @@
 <configuration>
     <!-- 加载java的配置文件或者声明属性信息 -->
     <properties resource="config/db.properties">
-        <property name="db.username" value="123" />
+        <!--<property name="db.username" value="123" />-->
     </properties>
 
+    <!--配置全局变量-->
+    <!--<settings>-->
+        <!--<setting name="" value=""/>-->
+    <!--</settings>-->
+
+    <!--别名定义-->
+    <typeAliases>
+        <!--针对单个别名-->
+        <!--type:类型路径-->
+        <!--alias:别名-->
+        <!--<typeAlias type="entity.User" alias="user"/>-->
+
+        <!--批量别名定义-->
+        <!--只需要指定包名，mybatis自动扫描包中的po类，自动定义别名，别名就是类名-->
+        <package name="entity"></package>
+    </typeAliases>
     <!-- 配置mybatis的环境信息，与spring整合，该信息由spring来管理 -->
     <environments default="development">
         <environment id="development">
@@ -15,6 +31,7 @@
             <transactionManager type="JDBC"></transactionManager>
             <!-- 配置数据源，采用mybatis连接池 -->
             <dataSource type="POOLED">
+                <!--value为db.properties的属性名-->
                 <property name="driver" value="${jdbc.driver}" />
                 <property name="url" value="${jdbc.url}" />
                 <property name="username" value="${jdbc.username}" />
@@ -24,9 +41,19 @@
     </environments>
     <!--加载映射文件 -->
     <mappers>
-        <mapper resource="config/user.xml"/>
+        <!--<mapper resource="config/user.xml"/>-->
+        <!--通过resource方法一次加载一个映射文件-->
+        <!--<mapper resource="config/UserMapper.xml"/>-->
 
-        <mapper resource="config/UserMapper.xml"/>
+        <!--通过mapper接口加载映射文件-->
+        <!--需要将mapper接口类名和mapper.xml映射文件名称保持一致，且在一个目录中-->
+        <!--<mapper class="mapper.UserMapper"/>-->
+
+        <!--批量加载
+        指定mapper接口的包名，mybatis自动扫描包下所有mapper接口进行加载
+        需要将mapper接口类名和mapper.xml映射文件名称保持一致，且在一个目录中
+        -->
+        <package name="mapper"/>
     </mappers>
 </configuration>
 

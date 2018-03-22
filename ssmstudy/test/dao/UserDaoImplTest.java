@@ -51,7 +51,7 @@ public class UserDaoImplTest {
         UserDao userDao = new UserDaoImpl(sqlSessionFactory);
 
         User user = new User();
-        user.setName("asd");
+        user.setName("ad");
         user.setBirthday(new Date());
         user.setAge(25);
 

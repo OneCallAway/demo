@@ -4,6 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--mapper中的namespace等于mapper的接口地址-->
 <mapper namespace="mapper.UserMapper">
+
+    <!--用户综合查询
+    #{userCustom.age}：取出包装对象中的年龄值
+    %${userCustom.name}%：取出包装对象中的用户名称
+    -->
+    <select id="findUserList" parameterType="entity.UserQueryVo" resultType="entity.UserCustomee">
+--         SELECT * FROM student WHERE student.id = #{} AND student.name LIKE '%${}%'
+        select * from student where student.age = #{userCustom.age} and student.name like '%${userCustom.name}%';
+    </select>
+
     <!--
      跟据id查询
      将sql语句封装到mappedStatement对象中，将id称为statement的id
