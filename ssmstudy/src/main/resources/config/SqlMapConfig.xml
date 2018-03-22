@@ -24,7 +24,9 @@
     </environments>
     <!--加载映射文件 -->
     <mappers>
-        <mapper resource="config/User.xml"/>
+        <mapper resource="config/user.xml"/>
+
+        <mapper resource="config/UserMapper.xml"/>
     </mappers>
 </configuration>
 

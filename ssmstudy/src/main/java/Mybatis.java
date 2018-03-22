@@ -53,7 +53,7 @@ public class Mybatis {
         SqlSession sqlSession = sqlSessionFactory.openSession ( );
 
         //通过sqlsession操作数据库
-        List<User> list = sqlSession.selectList ( "test.findUserByName", "wer" );
+        List<User> list = sqlSession.selectList ( "test.findUserByName", "zxc" );
 
         System.out.println ( list );
 
@@ -75,9 +75,9 @@ public class Mybatis {
 
         //插入用户对象
         User user = new User ();
-        user.setName("zxc");
+        user.setName("qwf");
         user.setBirthday(new Date ());
-        user.setAge(10);
+        user.setAge(18);
 
         //
         sqlSession.insert ( "test.insertUser",user );
