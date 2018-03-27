@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import javax.annotation.Resources;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.testng.Assert.*;
@@ -52,6 +53,21 @@ public class UserMapperTest {
 
         System.out.println(user);
     }
+
+    @Test
+    public void testFindUserByIdResultMap() throws Exception{
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        //创建UserMapper对象，mybatis自动生成mapper代理对象
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+        //调用usermapper的方法
+        User user = userMapper.findUserByIdResultMap(2);
+
+        sqlSession.close();
+
+        System.out.println(user);
+    }
     @Test
     public void testFindUserByName() throws Exception{
         SqlSession sqlSession = sqlSessionFactory.openSession();
@@ -75,15 +91,54 @@ public class UserMapperTest {
         //创建包装对象
         UserQueryVo userQueryVo = new UserQueryVo();
         UserCustom userCustom = new UserCustom();
+        /**
+         * 由于使用了动态sql，如果不设置某个值，条件不会拼接在sql中
+         * //userCustom.setAge(25);
+         * select * from student where student.name like '%${userCustom.name}%'
+         *
+         * userCustom.setName("ad");
+         * select * from student where student.age = #{userCustom.age}
+         *
+         */
         userCustom.setAge(25);
         userCustom.setName("ad");
+
+        //传入多个id
+        List<Integer> ids = new ArrayList<Integer>();
+        ids.add(1);
+        ids.add(10);
+        ids.add(16);
+        //将ids通过userQueryVo传入statement中
+        userQueryVo.setIds(ids);
         userQueryVo.setUserCustom(userCustom);
 
-        //调用usermapper发放
+        //调用usermapper方法
         List<UserCustom> list = userMapper.findUserList(userQueryVo);
 
         sqlSession.close();
 
         System.out.println(list);
+    }
+
+    @Test
+    public void testFindUserCount() throws Exception{
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        //创建UserMapper对象，mybatis自动生成mapper代理对象
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+        //创建包装对象
+        UserQueryVo userQueryVo = new UserQueryVo();
+        UserCustom userCustom = new UserCustom();
+        userCustom.setAge(25);
+        userCustom.getName("ad");
+        userQueryVo.setUserCustom(userCustom);
+
+        //调用usermapper方法
+        int count = userMapper.findUserCount(userQueryVo);
+
+        sqlSession.close();
+
+        System.out.println(count);
     }
 }
