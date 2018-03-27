@@ -37,7 +37,7 @@ public class UserDaoImpl implements UserDao {
         List<User> list = sqlSession.selectList("test.findUserByName",name);
 
         sqlSession.close();
-
+        
         return list;
     }
 
